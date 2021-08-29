@@ -847,6 +847,48 @@ function Cart(){
     })
   },[])
 
+   // global variable
+   let Product;
+    
+   // cart product increase function
+   const cartProductIncrease=(cartProduct)=>{
+       // console.log(cartProduct);
+       Product=cartProduct;
+       Product.qty=Product.qty+1;
+       Product.TotalProductPrice=Product.qty*Product.price;
+       // updating in database
+       auth.onAuthStateChanged(user=>{
+           if(user){
+               fs.collection('Cart ' + user.uid).doc(cartProduct.ID).update(Product).then(()=>{
+                   console.log('increment added');
+               })
+           }
+           else{
+               console.log('user is not logged in to increment');
+           }
+       })
+   }
+
+   // cart product decrease functionality
+   const cartProductDecrease =(cartProduct)=>{
+       Product=cartProduct;
+       if(Product.qty > 1){
+           Product.qty=Product.qty-1;
+           Product.TotalProductPrice=Product.qty*Product.price;
+            // updating in database
+           auth.onAuthStateChanged(user=>{
+               if(user){
+                   fs.collection('Cart ' + user.uid).doc(cartProduct.ID).update(Product).then(()=>{
+                       console.log('decrement');
+                   })
+               }
+               else{
+                   console.log('user is not logged in to decrement');
+               }
+           })
+       }
+   }
+
   return (
     <div className={classes.root}>
     <Grid container spacing={1}>
@@ -863,7 +905,11 @@ function Cart(){
                 </div>
             </div>
                 <div className={classes.productsBox}>
-                    <CartProducts cartProducts={cartProducts}/>
+                    <CartProducts 
+                    cartProducts={cartProducts}
+                    cartProductIncrease={cartProductIncrease}
+                    cartProductDecrease={cartProductDecrease}
+                           />
                 </div>
             </div>
         )}
@@ -957,7 +1003,12 @@ function IndividualCartProduct({cartProduct,cartProductIncrease,cartProductDecre
 
 function CartProducts({cartProducts}){
   return cartProducts.map((cartProduct)=>(
-      <IndividualCartProduct key={cartProduct.ID} cartProduct={cartProduct}/>
+      <IndividualCartProduct
+       key={cartProduct.ID}
+        cartProduct={cartProduct}
+        cartProductIncrease={cartProductIncrease}
+           cartProductDecrease={cartProductDecrease}
+        />
   ))
 }
 //=================================================== Purchase =======================
