@@ -895,11 +895,11 @@ function IndividualCartProduct({cartProduct,cartProductIncrease,cartProductDecre
         })
     },[])
     return user;
-  }
-  const user = GetCurrentUser();
+    }
+    const user = GetCurrentUser();
 
-  function GetUserUid(){
-  const [uid, setUid]=useState(null);
+    function GetUserUid(){
+    const [uid, setUid]=useState(null);
     useEffect(()=>{
         auth.onAuthStateChanged(user=>{
             if(user){
@@ -913,13 +913,13 @@ function IndividualCartProduct({cartProduct,cartProductIncrease,cartProductDecre
 
   const handleCartProductIncrease=()=>{
     cartProductIncrease(cartProduct);
-}
+  }
 
-const handleCartProductDecrease=()=>{
+  const handleCartProductDecrease=()=>{
     cartProductDecrease(cartProduct);
-}
+  }
 
-const handleCartProductDelete=()=>{
+  const handleCartProductDelete=()=>{
     auth.onAuthStateChanged(user=>{
         if(user){
             fs.collection('Cart ' + user.uid).doc(cartProduct.ID).delete().then(()=>{
@@ -927,7 +927,7 @@ const handleCartProductDelete=()=>{
             })
         }
     })
-}
+  }
 
 
 
@@ -940,17 +940,17 @@ const handleCartProductDelete=()=>{
           <div className='description' style={{height: '50px',overflow: 'hidden'}}>{cartProduct.description}</div>
           <div className='price' style={{fontWeight: '600'}}>R {cartProduct.price}</div>
           <span>Quantity</span>
-          <div className='quantity-box' style={{width: '100%',display: 'flex',justifyContent: 'space-between',alignItems: 'center',fontWeight: '600',padding: '5px',border: '1px solid #b9b5b5',borderRadius: '8px'}} onClick={handleCartProductIncrease}>
-              <div className='minus' style={{fontWeight: '600',cursor: 'pointer'}}>
+          <div className='quantity-box' style={{width: '100%',display: 'flex',justifyContent: 'space-between',alignItems: 'center',fontWeight: '600',padding: '5px',border: '1px solid #b9b5b5',borderRadius: '8px'}} >
+              <div className='minus' style={{fontWeight: '600',cursor: 'pointer'}} onClick={handleCartProductDecrease} >
                   <RemoveCircleOutlineRoundedIcon size={20} />
               </div>                
               <div>{cartProduct.qty}</div>               
-              <div className='plus' style={{fontWeight: '600',cursor: 'pointer'}}>
+              <div className='plus' style={{fontWeight: '600',cursor: 'pointer'}} onClick={handleCartProductIncrease}>
                   <AddCircleIcon size={20} onClick={ }/>
               </div>
           </div>
           <div className='cart-price' style={{fontWeight: '600',color: '#e00a02'}}>R {cartProduct.TotalProductPrice}</div>
-          <Button className='cart-btn' variant='contained' color='secondary' startIcon={<DeleteIcon />} fullWidth onClick={}>DELETE</Button>            
+          <Button className='cart-btn' variant='contained' color='secondary' startIcon={<DeleteIcon />} fullWidth onClick={handleCartProductDelete}>DELETE</Button>            
       </div>
   )
 }
