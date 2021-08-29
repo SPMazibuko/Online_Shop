@@ -1001,7 +1001,7 @@ function IndividualCartProduct({cartProduct,cartProductIncrease,cartProductDecre
   )
 }
 
-function CartProducts({cartProducts}){
+function CartProducts({cartProducts,cartProductIncrease,cartProductDecrease}){
   return cartProducts.map((cartProduct)=>(
       <IndividualCartProduct
        key={cartProduct.ID}
