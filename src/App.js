@@ -877,7 +877,7 @@ function Cart(){
 )
 }
 
-function IndividualCartProduct({cartProduct}){
+function IndividualCartProduct({cartProduct,cartProductIncrease,cartProductDecrease}){
   const classes = useStyles();
 
   function GetCurrentUser(){
@@ -911,6 +911,24 @@ function IndividualCartProduct({cartProduct}){
   }
   const uid = GetUserUid();
 
+  const handleCartProductIncrease=()=>{
+    cartProductIncrease(cartProduct);
+}
+
+const handleCartProductDecrease=()=>{
+    cartProductDecrease(cartProduct);
+}
+
+const handleCartProductDelete=()=>{
+    auth.onAuthStateChanged(user=>{
+        if(user){
+            fs.collection('Cart ' + user.uid).doc(cartProduct.ID).delete().then(()=>{
+                console.log('successfully deleted');
+            })
+        }
+    })
+}
+
 
 
   return (
@@ -922,9 +940,9 @@ function IndividualCartProduct({cartProduct}){
           <div className='description' style={{height: '50px',overflow: 'hidden'}}>{cartProduct.description}</div>
           <div className='price' style={{fontWeight: '600'}}>R {cartProduct.price}</div>
           <span>Quantity</span>
-          <div className='quantity-box' style={{width: '100%',display: 'flex',justifyContent: 'space-between',alignItems: 'center',fontWeight: '600',padding: '5px',border: '1px solid #b9b5b5',borderRadius: '8px'}}>
+          <div className='quantity-box' style={{width: '100%',display: 'flex',justifyContent: 'space-between',alignItems: 'center',fontWeight: '600',padding: '5px',border: '1px solid #b9b5b5',borderRadius: '8px'}} onClick={handleCartProductIncrease}>
               <div className='minus' style={{fontWeight: '600',cursor: 'pointer'}}>
-                  <RemoveCircleOutlineRoundedIcon size={20}/>
+                  <RemoveCircleOutlineRoundedIcon size={20} />
               </div>                
               <div>{cartProduct.qty}</div>               
               <div className='plus' style={{fontWeight: '600',cursor: 'pointer'}}>
